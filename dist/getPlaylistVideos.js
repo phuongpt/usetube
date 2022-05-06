@@ -46,7 +46,7 @@ function getPlaylistVideos(id, speedDate) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 15, , 16]);
-                    return [4 /*yield*/, getData_1.default('https://m.youtube.com/playlist?list=' + id)];
+                    return [4 /*yield*/, getData_1.default('https://cors-anywhere.herokuapp.com/https://m.youtube.com/playlist?list=' + id)];
                 case 1:
                     data = _a.sent();
                     apikey = data.apikey;
@@ -73,7 +73,7 @@ function getPlaylistVideos(id, speedDate) {
                     _a.label = 6;
                 case 6:
                     _a.trys.push([6, 12, , 13]);
-                    return [4 /*yield*/, getData_1.default('https://www.youtube.com/youtubei/v1/browse?key=' + apikey + '&token=' + token)];
+                    return [4 /*yield*/, getData_1.default('https://cors-anywhere.herokuapp.com/https://www.youtube.com/youtubei/v1/browse?key=' + apikey + '&token=' + token)];
                 case 7:
                     nextData = _a.sent();
                     nextVideos = nextData.items;

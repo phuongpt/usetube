@@ -5,7 +5,7 @@ import formatVideo from './helpers/formatVideo'
 
 export default async function getPlaylistVideos(id: string, speedDate?: boolean) {
   try {
-    const data: any = await getData('https://m.youtube.com/playlist?list='+id)
+    const data: any = await getData('https://cors-anywhere.herokuapp.com/https://m.youtube.com/playlist?list='+id)
     const apikey = data.apikey
     const items: any = findVal(data, 'playlistVideoListRenderer').contents
     let token: string = findVal(data, 'token')
@@ -20,7 +20,7 @@ export default async function getPlaylistVideos(id: string, speedDate?: boolean)
     }
     while(token) {
       try {
-        let nextData: any = await getData('https://www.youtube.com/youtubei/v1/browse?key='+apikey+'&token='+token)
+        let nextData: any = await getData('https://cors-anywhere.herokuapp.com/https://www.youtube.com/youtubei/v1/browse?key='+apikey+'&token='+token)
         let nextVideos: any = nextData.items
         token = nextData.token
         for(let i = 0; i < nextVideos.length; i++) {
