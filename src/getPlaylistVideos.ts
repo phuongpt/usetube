@@ -7,7 +7,10 @@ export default async function getPlaylistVideos(id: string, getDate?: boolean, s
   try {
     const data: any = await getData('https://m.youtube.com/playlist?list=' + id)
     const apikey = data.apikey
-    const items: any = findVal(data, 'playlistVideoListRenderer').contents
+    let items: any = findVal(data, 'playlistVideoListRenderer').contents
+    if (numberOfVideos && items.length > numberOfVideos) {
+      items = items.slice(0, numberOfVideos);
+    }
     let token: string = findVal(data, 'token')
     let videos: Video[] = []
     for (let i = 0; i < items.length; i++) {
@@ -25,6 +28,9 @@ export default async function getPlaylistVideos(id: string, getDate?: boolean, s
       try {
         let nextData: any = await getData('https://www.youtube.com/youtubei/v1/browse?key=' + apikey + '&token=' + token)
         let nextVideos: any = nextData.items
+        // if (numberOfVideos && videos.length + nextData.items.length > numberOfVideos) {
+        //   items = items.slice(0, numberOfVideos);
+        // }
         token = nextData.token
         for (let i = 0; i < nextVideos.length; i++) {
           if (nextVideos[i]) {

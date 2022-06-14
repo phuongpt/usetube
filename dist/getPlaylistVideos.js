@@ -51,6 +51,9 @@ function getPlaylistVideos(id, getDate, speedDate, getThumb, numberOfVideos) {
                     data = _a.sent();
                     apikey = data.apikey;
                     items = findVal_1.default(data, 'playlistVideoListRenderer').contents;
+                    if (numberOfVideos && items.length > numberOfVideos) {
+                        items = items.slice(0, numberOfVideos);
+                    }
                     token = findVal_1.default(data, 'token');
                     videos = [];
                     i = 0;
@@ -82,6 +85,9 @@ function getPlaylistVideos(id, getDate, speedDate, getThumb, numberOfVideos) {
                 case 8:
                     nextData = _a.sent();
                     nextVideos = nextData.items;
+                    // if (numberOfVideos && videos.length + nextData.items.length > numberOfVideos) {
+                    //   items = items.slice(0, numberOfVideos);
+                    // }
                     token = nextData.token;
                     i = 0;
                     _a.label = 9;
