@@ -40,6 +40,7 @@ exports.formatVideoImprove = void 0;
 var getVideoDate_1 = require("../getVideoDate");
 var getDateFromText_1 = require("./getDateFromText");
 var findVal_1 = require("./findVal");
+var grabLink = require('youtube-thumbnail-grabber');
 function formatVideo(video, speedDate) {
     var _a;
     if (speedDate === void 0) { speedDate = false; }
@@ -167,18 +168,20 @@ function formatVideo(video, speedDate) {
     });
 }
 exports.default = formatVideo;
-function formatVideoImprove(video, getDate, speedDate) {
+function formatVideoImprove(video, getDate, speedDate, getThumb) {
     var _a, _b, _c, _d;
     if (getDate === void 0) { getDate = false; }
     if (speedDate === void 0) { speedDate = false; }
+    if (getThumb === void 0) { getThumb = false; }
     return __awaiter(this, void 0, void 0, function () {
-        var publishedAt, id, durationDatas, splited, minutes, seconds, duration, e_2;
+        var publishedAt, imageUrl, id, durationDatas, splited, minutes, seconds, duration, e_2;
         return __generator(this, function (_e) {
             switch (_e.label) {
                 case 0:
-                    _e.trys.push([0, 6, , 7]);
+                    _e.trys.push([0, 8, , 9]);
                     publishedAt = new Date(Date.now());
-                    if (!(video.compactVideoRenderer || video.gridVideoRenderer || video.playlistVideoRenderer)) return [3 /*break*/, 4];
+                    imageUrl = void 0;
+                    if (!(video.compactVideoRenderer || video.gridVideoRenderer || video.playlistVideoRenderer)) return [3 /*break*/, 6];
                     if (video.compactVideoRenderer) {
                         video = video.compactVideoRenderer;
                     }
@@ -236,15 +239,22 @@ function formatVideoImprove(video, getDate, speedDate) {
                 case 2:
                     publishedAt = _e.sent();
                     _e.label = 3;
-                case 3: return [2 /*return*/, {
+                case 3:
+                    if (!getThumb) return [3 /*break*/, 5];
+                    return [4 /*yield*/, grabLink("https://www.youtube.com/watch?v=" + id, "max")];
+                case 4:
+                    imageUrl = _e.sent();
+                    _e.label = 5;
+                case 5: return [2 /*return*/, {
                         id: id,
                         original_title: video.original_title.trim(),
                         title: video.title.trim(),
                         artist: video.artist.trim(),
                         duration: duration,
-                        publishedAt: publishedAt
+                        publishedAt: publishedAt,
+                        imageUrl: imageUrl
                     }];
-                case 4:
+                case 6:
                     if (video.didYouMeanRenderer || video.showingResultsForRenderer) {
                         video = video.didYouMeanRenderer ? video.didYouMeanRenderer : video.showingResultsForRenderer;
                         return [2 /*return*/, {
@@ -253,16 +263,17 @@ function formatVideoImprove(video, getDate, speedDate) {
                                 title: video.correctedQuery.runs[0].text,
                                 artist: '',
                                 duration: 0,
-                                publishedAt: publishedAt
+                                publishedAt: publishedAt,
+                                imageUrl: imageUrl
                             }];
                     }
-                    _e.label = 5;
-                case 5: return [3 /*break*/, 7];
-                case 6:
+                    _e.label = 7;
+                case 7: return [3 /*break*/, 9];
+                case 8:
                     e_2 = _e.sent();
                     console.error('format video failed', e_2);
-                    return [3 /*break*/, 7];
-                case 7: return [2 /*return*/];
+                    return [3 /*break*/, 9];
+                case 9: return [2 /*return*/];
             }
         });
     });

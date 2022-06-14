@@ -1,6 +1,6 @@
 {
   "name": "usetube",
-  "version": "2.1.5",
+  "version": "2.1.6",
   "description": "crawl youtube without api key (search videos channels or get all channel/playlist's videos)",
   "main": "dist/usetube",
   "directories": {
@@ -46,6 +46,7 @@
   },
   "homepage": "https://github.com/valerebron/usetube#readme",
   "dependencies": {
-    "axios": "^0.21.1"
+    "axios": "^0.21.1",
+    "youtube-thumbnail-grabber": "^1.0.2"
   }
 }

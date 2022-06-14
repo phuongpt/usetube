@@ -3,7 +3,7 @@ import getData from './helpers/getData'
 import findVal from './helpers/findVal'
 import formatVideo, { formatVideoImprove } from './helpers/formatVideo'
 
-export default async function getPlaylistVideos(id: string, getDate?: boolean, speedDate?: boolean, numberOfVideos?: number) {
+export default async function getPlaylistVideos(id: string, getDate?: boolean, speedDate?: boolean, getThumb?: boolean, numberOfVideos?: number) {
   try {
     const data: any = await getData('https://m.youtube.com/playlist?list=' + id)
     const apikey = data.apikey
@@ -12,7 +12,7 @@ export default async function getPlaylistVideos(id: string, getDate?: boolean, s
     let videos: Video[] = []
     for (let i = 0; i < items.length; i++) {
       if (items[i]) {
-        const formated = await formatVideoImprove(items[i], getDate, speedDate)
+        const formated = await formatVideoImprove(items[i], getDate, speedDate, getThumb)
         if (formated) {
           videos.push(formated)
         }
@@ -28,7 +28,7 @@ export default async function getPlaylistVideos(id: string, getDate?: boolean, s
         token = nextData.token
         for (let i = 0; i < nextVideos.length; i++) {
           if (nextVideos[i]) {
-            const formated = await formatVideoImprove(nextVideos[i], getDate, speedDate)
+            const formated = await formatVideoImprove(nextVideos[i], getDate, speedDate, getThumb)
             if (formated) {
               videos.push(formated)
             }

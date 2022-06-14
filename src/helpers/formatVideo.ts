@@ -1,6 +1,7 @@
 import getVideoDate from '../getVideoDate'
 import getDateFromText from './getDateFromText'
 import findVal from './findVal'
+const grabLink = require('youtube-thumbnail-grabber');
 
 export default async function formatVideo(video: any, speedDate: boolean = false) {
   try {
@@ -120,9 +121,10 @@ export default async function formatVideo(video: any, speedDate: boolean = false
 }
 
 
-export async function formatVideoImprove(video: any, getDate = false, speedDate: boolean = false) {
+export async function formatVideoImprove(video: any, getDate: boolean = false, speedDate: boolean = false, getThumb: boolean = false) {
   try {
     let publishedAt: Date = new Date(Date.now());
+    let imageUrl;
 
     if (video.compactVideoRenderer || video.gridVideoRenderer || video.playlistVideoRenderer) {
       if (video.compactVideoRenderer) {
@@ -186,13 +188,20 @@ export async function formatVideoImprove(video: any, getDate = false, speedDate:
         }
       }
 
+      //thumb
+
+      if (getThumb) {
+        imageUrl = await grabLink(`https://www.youtube.com/watch?v=${id}`, "max");
+      }
+
       return {
         id: id,
         original_title: video.original_title.trim(),
         title: video.title.trim(),
         artist: video.artist.trim(),
         duration,
-        publishedAt
+        publishedAt,
+        imageUrl
       }
     }
     else if (video.didYouMeanRenderer || video.showingResultsForRenderer) {
@@ -203,7 +212,8 @@ export async function formatVideoImprove(video: any, getDate = false, speedDate:
         title: video.correctedQuery.runs[0].text,
         artist: '',
         duration: 0,
-        publishedAt
+        publishedAt,
+        imageUrl
       }
     }
   } catch (e) {

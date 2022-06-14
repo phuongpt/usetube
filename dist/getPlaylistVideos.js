@@ -39,7 +39,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var getData_1 = require("./helpers/getData");
 var findVal_1 = require("./helpers/findVal");
 var formatVideo_1 = require("./helpers/formatVideo");
-function getPlaylistVideos(id, getDate, speedDate, numberOfVideos) {
+function getPlaylistVideos(id, getDate, speedDate, getThumb, numberOfVideos) {
     return __awaiter(this, void 0, void 0, function () {
         var data, apikey, items, token, videos, i, formated, nextData, nextVideos, i, formated, e_1, e_2;
         return __generator(this, function (_a) {
@@ -58,7 +58,7 @@ function getPlaylistVideos(id, getDate, speedDate, numberOfVideos) {
                 case 2:
                     if (!(i < items.length)) return [3 /*break*/, 5];
                     if (!items[i]) return [3 /*break*/, 4];
-                    return [4 /*yield*/, formatVideo_1.formatVideoImprove(items[i], getDate, speedDate)];
+                    return [4 /*yield*/, formatVideo_1.formatVideoImprove(items[i], getDate, speedDate, getThumb)];
                 case 3:
                     formated = _a.sent();
                     if (formated) {
@@ -88,7 +88,7 @@ function getPlaylistVideos(id, getDate, speedDate, numberOfVideos) {
                 case 9:
                     if (!(i < nextVideos.length)) return [3 /*break*/, 12];
                     if (!nextVideos[i]) return [3 /*break*/, 11];
-                    return [4 /*yield*/, formatVideo_1.formatVideoImprove(nextVideos[i], getDate, speedDate)];
+                    return [4 /*yield*/, formatVideo_1.formatVideoImprove(nextVideos[i], getDate, speedDate, getThumb)];
                 case 10:
                     formated = _a.sent();
                     if (formated) {
