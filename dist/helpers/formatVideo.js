@@ -36,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.formatVideoImprove = void 0;
 var getVideoDate_1 = require("../getVideoDate");
 var getDateFromText_1 = require("./getDateFromText");
 var findVal_1 = require("./findVal");
@@ -158,7 +159,7 @@ function formatVideo(video, speedDate) {
                 case 5: return [3 /*break*/, 7];
                 case 6:
                     e_1 = _b.sent();
-                    console.log('format video failed');
+                    console.log('format video failed', e_1);
                     return [3 /*break*/, 7];
                 case 7: return [2 /*return*/];
             }
@@ -166,4 +167,105 @@ function formatVideo(video, speedDate) {
     });
 }
 exports.default = formatVideo;
+function formatVideoImprove(video, getDate, speedDate) {
+    var _a, _b, _c, _d;
+    if (getDate === void 0) { getDate = false; }
+    if (speedDate === void 0) { speedDate = false; }
+    return __awaiter(this, void 0, void 0, function () {
+        var publishedAt, id, durationDatas, splited, minutes, seconds, duration, e_2;
+        return __generator(this, function (_e) {
+            switch (_e.label) {
+                case 0:
+                    _e.trys.push([0, 6, , 7]);
+                    publishedAt = new Date(Date.now());
+                    if (!(video.compactVideoRenderer || video.gridVideoRenderer || video.playlistVideoRenderer)) return [3 /*break*/, 4];
+                    if (video.compactVideoRenderer) {
+                        video = video.compactVideoRenderer;
+                    }
+                    else if (video.gridVideoRenderer) {
+                        video = video.gridVideoRenderer;
+                    }
+                    else if (video.playlistVideoRenderer) {
+                        video = video.playlistVideoRenderer;
+                    }
+                    id = video.videoId;
+                    durationDatas = 0;
+                    // get title
+                    if (video.title.simpleText) {
+                        video.title = video.title.simpleText;
+                    }
+                    else if (video.title.runs[0].text) {
+                        video.title = video.title.runs[0].text;
+                    }
+                    else {
+                        video.title = '';
+                    }
+                    // title formating
+                    video.original_title = video.title;
+                    if (video.title.split('-').length === 1) {
+                        video.artist = '';
+                    }
+                    else {
+                        splited = video.original_title.match(/([^,]*)-(.*)/);
+                        video.artist = splited[1];
+                        video.title = splited[2];
+                    }
+                    // duration formating
+                    if (video.lengthText) {
+                        durationDatas = video.lengthText.runs[0].text.split(':');
+                    }
+                    else if ((_b = (_a = video.thumbnailOverlays[0]) === null || _a === void 0 ? void 0 : _a.thumbnailOverlayTimeStatusRenderer) === null || _b === void 0 ? void 0 : _b.text.simpleText) {
+                        durationDatas = ((_d = (_c = video.thumbnailOverlays[0]) === null || _c === void 0 ? void 0 : _c.thumbnailOverlayTimeStatusRenderer) === null || _d === void 0 ? void 0 : _d.text.simpleText.split(':')) || '';
+                    }
+                    else {
+                        durationDatas = [0, 0];
+                    }
+                    minutes = parseInt(durationDatas[0]) * 60;
+                    seconds = parseInt(durationDatas[1]);
+                    duration = minutes + seconds;
+                    if (!getDate) return [3 /*break*/, 3];
+                    if (!(speedDate && video.publishedTimeText)) return [3 /*break*/, 1];
+                    if (video.publishedTimeText.hasOwnProperty('simpleText')) {
+                        publishedAt = getDateFromText_1.default(video.publishedTimeText.simpleText);
+                    }
+                    else if (video.publishedTimeText.hasOwnProperty('runs')) {
+                        publishedAt = getDateFromText_1.default(video.publishedTimeText.runs[0].text);
+                    }
+                    return [3 /*break*/, 3];
+                case 1: return [4 /*yield*/, getVideoDate_1.default(id)];
+                case 2:
+                    publishedAt = _e.sent();
+                    _e.label = 3;
+                case 3: return [2 /*return*/, {
+                        id: id,
+                        original_title: video.original_title.trim(),
+                        title: video.title.trim(),
+                        artist: video.artist.trim(),
+                        duration: duration,
+                        publishedAt: publishedAt
+                    }];
+                case 4:
+                    if (video.didYouMeanRenderer || video.showingResultsForRenderer) {
+                        video = video.didYouMeanRenderer ? video.didYouMeanRenderer : video.showingResultsForRenderer;
+                        return [2 /*return*/, {
+                                id: 'didyoumean',
+                                original_title: '',
+                                title: video.correctedQuery.runs[0].text,
+                                artist: '',
+                                duration: 0,
+                                publishedAt: publishedAt
+                            }];
+                    }
+                    _e.label = 5;
+                case 5: return [3 /*break*/, 7];
+                case 6:
+                    e_2 = _e.sent();
+                    console.error('format video failed', e_2);
+                    return [3 /*break*/, 7];
+                case 7: return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.formatVideoImprove = formatVideoImprove;
 //# sourceMappingURL=formatVideo.js.map

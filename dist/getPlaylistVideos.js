@@ -39,13 +39,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var getData_1 = require("./helpers/getData");
 var findVal_1 = require("./helpers/findVal");
 var formatVideo_1 = require("./helpers/formatVideo");
-function getPlaylistVideos(id, speedDate) {
+function getPlaylistVideos(id, getDate, speedDate, numberOfVideos) {
     return __awaiter(this, void 0, void 0, function () {
         var data, apikey, items, token, videos, i, formated, nextData, nextVideos, i, formated, e_1, e_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 15, , 16]);
+                    _a.trys.push([0, 16, , 17]);
                     return [4 /*yield*/, getData_1.default('https://m.youtube.com/playlist?list=' + id)];
                 case 1:
                     data = _a.sent();
@@ -58,7 +58,7 @@ function getPlaylistVideos(id, speedDate) {
                 case 2:
                     if (!(i < items.length)) return [3 /*break*/, 5];
                     if (!items[i]) return [3 /*break*/, 4];
-                    return [4 /*yield*/, formatVideo_1.default(items[i], speedDate)];
+                    return [4 /*yield*/, formatVideo_1.formatVideoImprove(items[i], getDate, speedDate)];
                 case 3:
                     formated = _a.sent();
                     if (formated) {
@@ -69,44 +69,52 @@ function getPlaylistVideos(id, speedDate) {
                     i++;
                     return [3 /*break*/, 2];
                 case 5:
-                    if (!token) return [3 /*break*/, 14];
+                    if (numberOfVideos && videos.length >= numberOfVideos) {
+                        return [2 /*return*/, videos];
+                    }
                     _a.label = 6;
                 case 6:
-                    _a.trys.push([6, 12, , 13]);
-                    return [4 /*yield*/, getData_1.default('https://www.youtube.com/youtubei/v1/browse?key=' + apikey + '&token=' + token)];
+                    if (!token) return [3 /*break*/, 15];
+                    _a.label = 7;
                 case 7:
+                    _a.trys.push([7, 13, , 14]);
+                    return [4 /*yield*/, getData_1.default('https://www.youtube.com/youtubei/v1/browse?key=' + apikey + '&token=' + token)];
+                case 8:
                     nextData = _a.sent();
                     nextVideos = nextData.items;
                     token = nextData.token;
                     i = 0;
-                    _a.label = 8;
-                case 8:
-                    if (!(i < nextVideos.length)) return [3 /*break*/, 11];
-                    if (!nextVideos[i]) return [3 /*break*/, 10];
-                    return [4 /*yield*/, formatVideo_1.default(nextVideos[i], speedDate)];
+                    _a.label = 9;
                 case 9:
+                    if (!(i < nextVideos.length)) return [3 /*break*/, 12];
+                    if (!nextVideos[i]) return [3 /*break*/, 11];
+                    return [4 /*yield*/, formatVideo_1.formatVideoImprove(nextVideos[i], getDate, speedDate)];
+                case 10:
                     formated = _a.sent();
                     if (formated) {
                         videos.push(formated);
                     }
-                    _a.label = 10;
-                case 10:
+                    _a.label = 11;
+                case 11:
                     i++;
-                    return [3 /*break*/, 8];
-                case 11: return [3 /*break*/, 13];
+                    return [3 /*break*/, 9];
                 case 12:
+                    if (numberOfVideos && videos.length >= numberOfVideos) {
+                        return [3 /*break*/, 15];
+                    }
+                    return [3 /*break*/, 14];
+                case 13:
                     e_1 = _a.sent();
-                    console.log('getPlaylistVideos failed');
-                    // console.log(e)
+                    console.log('getPlaylistVideos failed', e_1);
                     token = '';
-                    return [3 /*break*/, 13];
-                case 13: return [3 /*break*/, 5];
-                case 14: return [2 /*return*/, videos];
-                case 15:
+                    return [3 /*break*/, 14];
+                case 14: return [3 /*break*/, 6];
+                case 15: return [2 /*return*/, videos];
+                case 16:
                     e_2 = _a.sent();
-                    console.log('cannot get playlist ' + id + ', try again');
-                    return [3 /*break*/, 16];
-                case 16: return [2 /*return*/];
+                    console.log('cannot get playlist ' + id + ', try again', e_2);
+                    return [3 /*break*/, 17];
+                case 17: return [2 /*return*/];
             }
         });
     });
